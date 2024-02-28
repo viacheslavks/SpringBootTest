@@ -3,6 +3,7 @@ package ru.slava.SpringBootTest.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import ru.slava.SpringBootTest.model.User;
 
@@ -42,12 +43,17 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void update(User userUpdate) {
         User userToBeUpdate = entityManager.find(User.class, userUpdate.getId());
-        userToBeUpdate.setName(userUpdate.getName());
-        userToBeUpdate.setLastName(userUpdate.getLastName());
-        userToBeUpdate.setAge(userUpdate.getAge());
-        userToBeUpdate.setEmail(userUpdate.getEmail());
-        entityManager.merge(userToBeUpdate);
+
+        if (userToBeUpdate != null) {
+            userToBeUpdate.setName(userUpdate.getName());
+            userToBeUpdate.setLastName(userUpdate.getLastName());
+            userToBeUpdate.setAge(userUpdate.getAge());
+            userToBeUpdate.setEmail(userUpdate.getEmail());
+
+            entityManager.merge(userToBeUpdate);
+        }
     }
+
 
     @Override
     public List<User> findAll() {
